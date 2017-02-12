@@ -11,4 +11,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("SELECT c FROM #{#entityName} c WHERE c.cpf=?1 AND c.agencia=?2 AND c.numero=?3")
     Account findUnique(String cpf, String agencia, String numero);
+
+    @Query("SELECT c FROM #{#entityName} c WHERE c.cpf=?1")
+    Account findUnique(String cpf);
+
 }

@@ -3,10 +3,17 @@ package br.com.rbarbioni.bluebank.model;
 import br.com.rbarbioni.bluebank.util.Cpf;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -14,8 +21,9 @@ import java.util.Date;
  */
 
 @Entity
-@Table( name = "conta_corrente" )
-public class Account implements Serializable {
+@Table( name = "account" )
+@EntityListeners(AuditingEntityListener.class)
+public class Account implements Serializable, UserDetails, Authentication {
 
     private static final long serialVersionUID = -6226618365169837926L;
 
@@ -24,8 +32,13 @@ public class Account implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "create_at")
-    private Date createAt;
+    @CreatedDate
+    @Column(name = "created_date")
+    private Date createdDate;
+
+    @LastModifiedDate
+    @Column(name = "modified_date")
+    private Date modifieldDate;
 
     @Cpf
     @NotEmpty
@@ -47,11 +60,15 @@ public class Account implements Serializable {
     @Column(name = "password")
     private String password;
 
+    @Transient
+    private String token;
+
     private Account(){
         super();
-        this.createAt = new Date();
+        this.createdDate = new Date();
         this.saldo = BigDecimal.ZERO;
     }
+
     public Account(String cpf, String agencia, String numero) {
         this();
         this.cpf = cpf;
@@ -59,12 +76,17 @@ public class Account implements Serializable {
         this.numero = numero;
     }
 
+    public Account(String cpf, String agencia, String numero, String password) {
+        this(cpf, agencia, numero);
+        this.password = password;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public Date getCreateAt() {
-        return createAt;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
     public String getCpf() {
@@ -83,8 +105,80 @@ public class Account implements Serializable {
         return saldo;
     }
 
+    public Date getModifieldDate() {
+        return modifieldDate;
+    }
+
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @JsonIgnore
+    @Override
+    public Object getCredentials() {
+        return null;
+    }
+
+    @JsonIgnore
+    @Override
+    public Object getDetails() {
+        return null;
+    }
+
+    @JsonIgnore
+    @Override
+    public Object getPrincipal() {
+        return null;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAuthenticated() {
+        return false;
+    }
+
+    @JsonIgnore
+    @Override
+    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+
+    }
+
+    @JsonIgnore
     public String getPassword() {
         return password;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getUsername() {
+        return this.cpf;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+
+    @JsonIgnore
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void sacar(BigDecimal valor){
@@ -93,5 +187,18 @@ public class Account implements Serializable {
 
     public void depositar (BigDecimal valor){
         this.saldo = this.saldo.add(valor);
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

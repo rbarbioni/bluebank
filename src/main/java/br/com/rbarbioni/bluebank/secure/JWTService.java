@@ -1,16 +1,19 @@
 package br.com.rbarbioni.bluebank.secure;
 
 import br.com.rbarbioni.bluebank.model.Account;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -26,40 +29,40 @@ public class JWTService {
 
     private final Long expirationTime;
 
+    private final ObjectMapper objectMapper;
+
     @Autowired
-    public JWTService(@Value("secret") String secret, @Value("expiration_time") String expirationTime) {
-        this.secret = secret;
-        this.expirationTime = Long.valueOf(expirationTime);
+    public JWTService(Environment env, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+        this.secret = env.getProperty("jwt.secret");
+        this.expirationTime = Long.valueOf(env.getProperty("jwt.expiration_time")) * 60 * 1000;
     }
 
-    private String encode(Account account) {
+    public String encode(Account account) throws JsonProcessingException {
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
 
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secret);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
-        JwtBuilder builder = Jwts.builder().setId(account.getId().toString())
-                .setIssuedAt(now)
-                .setIssuer(account.getNumero())
-                .signWith(signatureAlgorithm, signingKey);
+        JwtBuilder builder = Jwts.builder();
+        Claims claims = Jwts.claims();
+        claims.setId(account.getId().toString()).put("payload", this.objectMapper.writeValueAsString(account));
+        builder.setClaims(claims).signWith(signatureAlgorithm, signingKey);
 
         if (expirationTime >= 0) {
-            long expMillis = nowMillis + expirationTime;
+            long expMillis = System.currentTimeMillis() + expirationTime;
             Date exp = new Date(expMillis);
             builder.setExpiration(exp);
         }
         return Base64.getEncoder().encodeToString(builder.compact().getBytes());
     }
 
-    private boolean decode(String token) {
+    public Account decode(String token) throws IOException {
 
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(secret))
                 .parseClaimsJws(new String(Base64.getDecoder().decode(token))).getBody();
-        return claims.getId() != null && !claims.getId().isEmpty();
+        return this.objectMapper.readValue(claims.get("payload").toString(), Account.class);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 
 /**
  * Created by renan on 10/02/2017.
@@ -38,8 +39,17 @@ public class AccountService {
         return account;
     }
 
+    public Account findUnique(String cpf){
+
+        Account account = this.accountRepository.findUnique(cpf);
+        if(account == null){
+            throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), String.format("Account inválida [cpf: %s]", cpf));
+        }
+        return account;
+    }
+
     @Transactional
-    public Account transferir (AccountTransferDto accountTransferDto){
+    public Account transfer(AccountTransferDto accountTransferDto){
 
         Account source = this.findUnique(
                 accountTransferDto.getSource().getCpf(),
@@ -75,8 +85,7 @@ public class AccountService {
     public Account sacar(Account account, Double valor){
 
         if(account.getSaldo().doubleValue() < valor){
-            throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), String.format("Saldo insuficiente [cpf: %s, agência: %s, numero: %s, valor %d]",
-                    account.getCpf(), account.getAgencia(), account.getNumero(), valor));
+            throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), String.format("Saldo insuficiente [saldo: %s]", NumberFormat.getCurrencyInstance().format(account.getSaldo())));
         }
 
         account.sacar(BigDecimal.valueOf(valor));

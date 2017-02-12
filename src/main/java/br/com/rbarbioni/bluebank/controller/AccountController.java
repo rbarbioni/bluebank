@@ -33,10 +33,10 @@ public class AccountController {
         return this.accountService.findUnique(cpf, agencia, numero);
     }
 
-    @RequestMapping(value = "transferir", method = {RequestMethod.POST})
+    @RequestMapping(value = "transfer", method = {RequestMethod.POST})
     public Account depositar (
             @NotNull @RequestBody AccountTransferDto accountTransferDto){
 
-        return this.accountService.transferir(accountTransferDto);
+        return this.accountService.transfer(accountTransferDto);
     }
 }
