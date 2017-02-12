@@ -1,5 +1,8 @@
 package br.com.rbarbioni.bluebank.model;
 
+import br.com.rbarbioni.bluebank.util.Cpf;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -10,7 +13,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table( name = "ContaCorrente" )
+@Table( name = "conta_corrente" )
 public class ContaCorrente implements Serializable {
 
     private static final long serialVersionUID = -6226618365169837926L;
@@ -23,12 +26,16 @@ public class ContaCorrente implements Serializable {
     @Column(name = "create_at")
     private Date createAt;
 
+    @Cpf
+    @NotEmpty
     @Column(name = "cpf")
     private String cpf;
 
+    @NotEmpty
     @Column(name = "agencia")
     private String agencia;
 
+    @NotEmpty
     @Column(name = "conta")
     private String conta;
 

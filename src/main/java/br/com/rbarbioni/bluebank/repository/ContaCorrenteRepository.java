@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface ContaCorrenteRepository extends JpaRepository<ContaCorrente, Long> {
 
-    @Query("SELECT c FROM ContaCorrente c WHERE conta.cpf=?1 AND conta.agencia=?2 AND conta.conta=?3")
-    ContaCorrente findUnique(ContaCorrente conta);
+    @Query("SELECT c FROM #{#entityName} c WHERE c.cpf=?1 AND c.agencia=?2 AND c.conta=?3")
+    ContaCorrente findUnique(String cpf, String agencia, String conta);
 }

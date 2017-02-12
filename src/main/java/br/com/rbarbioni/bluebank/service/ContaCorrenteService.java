@@ -1,9 +1,11 @@
 package br.com.rbarbioni.bluebank.service;
 
+import br.com.rbarbioni.bluebank.exception.BlueBankException;
 import br.com.rbarbioni.bluebank.model.ContaCorrente;
 import br.com.rbarbioni.bluebank.model.dto.ContaCorrenteTransferenciaDto;
 import br.com.rbarbioni.bluebank.repository.ContaCorrenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +29,11 @@ public class ContaCorrenteService {
         return this.contaCorrenteRepository.save(contaCorrente);
     }
 
-    public ContaCorrente findUnique(ContaCorrente contaCorrente){
-        contaCorrente = this.contaCorrenteRepository.findUnique(contaCorrente);
+    public ContaCorrente findUnique(String cpf, String agencia, String conta){
+
+        ContaCorrente contaCorrente = this.contaCorrenteRepository.findUnique(cpf, agencia, conta);
         if(contaCorrente == null){
-            throw new IllegalStateException(String.format("ContaCorrente inválida [cpf: %s, agencia: %s, conta: %s]",
-                    contaCorrente.getAgencia(), contaCorrente.getConta(), contaCorrente.getConta()));
+            throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), String.format("ContaCorrente inválida [cpf: %s, agencia: %s, conta: %s]", cpf, agencia, conta));
         }
         return contaCorrente;
     }
@@ -39,13 +41,21 @@ public class ContaCorrenteService {
     @Transactional
     public ContaCorrente transferir (ContaCorrenteTransferenciaDto contaCorrenteTransferenciaDto){
 
-        ContaCorrente contaOrigem = this.findUnique(contaCorrenteTransferenciaDto.getContaOrigem());
+        ContaCorrente contaOrigem = this.findUnique(
+                contaCorrenteTransferenciaDto.getContaOrigem().getCpf(),
+                contaCorrenteTransferenciaDto.getContaOrigem().getAgencia(),
+                contaCorrenteTransferenciaDto.getContaOrigem().getConta()
+                );
 
         contaOrigem = sacar(contaOrigem, contaCorrenteTransferenciaDto.getValor());
 
         this.save(contaOrigem);
 
-        ContaCorrente contaDestino = this.findUnique(contaCorrenteTransferenciaDto.getContaDestino());
+        ContaCorrente contaDestino = this.findUnique(
+                contaCorrenteTransferenciaDto.getContaDestino().getCpf(),
+                contaCorrenteTransferenciaDto.getContaDestino().getAgencia(),
+                contaCorrenteTransferenciaDto.getContaDestino().getConta()
+        );
 
         contaDestino = depositar(contaDestino, contaCorrenteTransferenciaDto.getValor());
 
@@ -65,7 +75,7 @@ public class ContaCorrenteService {
     public ContaCorrente sacar(ContaCorrente contaCorrente, Double valor){
 
         if(contaCorrente.getSaldo().doubleValue() < valor){
-            throw new IllegalStateException(String.format("Saldo insuficiente [cpf: %s, agência: %s, conta: %s, valor %d]",
+            throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), String.format("Saldo insuficiente [cpf: %s, agência: %s, conta: %s, valor %d]",
                     contaCorrente.getCpf(), contaCorrente.getAgencia(), contaCorrente.getConta(), valor));
         }
 
