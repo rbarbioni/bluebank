@@ -4,7 +4,7 @@ Blue Bank é um projeto para testar seus conhecimentos de backend e frontend.
 Você irá criar uma aplicação web para simular a transferência bancária entre contas cadastradas.
 Esse teste consiste em avaliar seus conhecimentos como fullstack developer.
 
-Você deverá criar um banco de dadaos contendo uma tabela de conta, a tabela deverá conter os seguintes atributos:
+Você deverá criar um banco de dadaos contendo uma tabela de numero, a tabela deverá conter os seguintes atributos:
 - ID
 - CPF do Cliente
 - Numero da Agencia
@@ -14,9 +14,9 @@ O banco de dados deve ser populado com algumas contas.
 
 ## Requisitos Funcionais
 
-1. A tela deverá os seguintes campos: Agencia/Numero da conta origem e destino e valor
+1. A tela deverá os seguintes campos: Agencia/Numero da numero origem e destino e amount
 2. Verificar a existencia das contas informadas
-3. Verificar a disponibilidade do saldo da conta de origem, o valor a ser debitado deve ser maior ou igual ao saldo disponível na conta.
+3. Verificar a disponibilidade do saldo da numero de origem, o amount a ser debitado deve ser maior ou igual ao saldo disponível na numero.
 
 ## Requisitos Técnicos
 

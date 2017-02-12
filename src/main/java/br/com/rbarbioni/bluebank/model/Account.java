@@ -1,6 +1,7 @@
 package br.com.rbarbioni.bluebank.model;
 
 import br.com.rbarbioni.bluebank.util.Cpf;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.Date;
 
 @Entity
 @Table( name = "conta_corrente" )
-public class ContaCorrente implements Serializable {
+public class Account implements Serializable {
 
     private static final long serialVersionUID = -6226618365169837926L;
 
@@ -36,22 +37,26 @@ public class ContaCorrente implements Serializable {
     private String agencia;
 
     @NotEmpty
-    @Column(name = "conta")
-    private String conta;
+    @Column(name = "numero")
+    private String numero;
 
     @Column(name = "saldo")
     private BigDecimal saldo;
 
-    private ContaCorrente(){
+    @JsonIgnore
+    @Column(name = "password")
+    private String password;
+
+    private Account(){
         super();
         this.createAt = new Date();
         this.saldo = BigDecimal.ZERO;
     }
-    public ContaCorrente(String cpf, String agencia, String conta) {
+    public Account(String cpf, String agencia, String numero) {
         this();
         this.cpf = cpf;
         this.agencia = agencia;
-        this.conta = conta;
+        this.numero = numero;
     }
 
     public Long getId() {
@@ -70,12 +75,16 @@ public class ContaCorrente implements Serializable {
         return agencia;
     }
 
-    public String getConta() {
-        return conta;
+    public String getNumero() {
+        return numero;
     }
 
     public BigDecimal getSaldo() {
         return saldo;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void sacar(BigDecimal valor){
