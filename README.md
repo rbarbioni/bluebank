@@ -20,12 +20,62 @@ gradlew build
 
 java -jar build/libs/bluebank-0.0.1-SNAPSHOT.war
 
-Para facilitar o deploy, as dependências do front-end formam incluídas no projeto, caso haja problemas com com o from execute:
+Para facilitar o deploy, as dependências do front-end formam incluídas no projeto,
+caso haja problemas com com o from execute:
 
 cd src/main/resources/public
 
 sudo npm install
 </pre>
+
+## API
+
+POST
+http://bluebank-pusherad.rhcloud.com/api/login
+<pre>
+curl -X POST -H "Content-Type: application/json" -d
+    '{
+        "cpf": "31449881114",
+        "agencia": "1000",
+        "numero": "10000",
+        "password": "5f4dcc3b5aa765d61d8327deb882cf99"
+    }'
+    "http://bluebank-pusherad.rhcloud.com/api/login"
+
+</pre>
+
+GET
+http://bluebank-pusherad.rhcloud.com/api/account
+<pre>
+curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" "http://bluebank-pusherad.rhcloud.com/api/account?cpf=31449881114&agencia=1000&numero=10000"
+</pre>
+
+POST
+http://bluebank-pusherad.rhcloud.com/api/account/transfer
+<pre>
+curl -X POST -H "Content-Type: application/json" -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" -d '{
+     "source" : {
+          "cpf": "31449881114",
+          "agencia": "1000",
+          "numero": "10000"
+     },
+
+     "destination" : {
+          "cpf": "65261248876",
+          "agencia": "2000",
+          "numero": "20000"
+     },
+
+     "amount": 500
+}' "http://bluebank-pusherad.rhcloud.com/api/account/transfer"
+</pre>
+
+GET
+http://bluebank-pusherad.rhcloud.com/api/account/statement
+<pre>
+curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" "http://bluebank-pusherad.rhcloud.com/api/statement?cpf=31449881114&agencia=1000&numero=10000"
+</pre>
+
 
 ## Tecnologias
 - Spring-Boot;
