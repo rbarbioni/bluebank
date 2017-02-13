@@ -47,7 +47,8 @@ curl -X POST -H "Content-Type: application/json" -d
 GET
 http://bluebank-pusherad.rhcloud.com/api/account
 <pre>
-curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" "http://bluebank-pusherad.rhcloud.com/api/account?cpf=31449881114&agencia=1000&numero=10000"
+curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN"
+"http://bluebank-pusherad.rhcloud.com/api/account?cpf=31449881114&agencia=1000&numero=10000"
 </pre>
 
 POST
@@ -73,7 +74,8 @@ curl -X POST -H "Content-Type: application/json" -H "Authorization: TOKEN_QUE_RE
 GET
 http://bluebank-pusherad.rhcloud.com/api/account/statement
 <pre>
-curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" "http://bluebank-pusherad.rhcloud.com/api/statement?cpf=31449881114&agencia=1000&numero=10000"
+curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN"
+"http://bluebank-pusherad.rhcloud.com/api/statement?cpf=31449881114&agencia=1000&numero=10000"
 </pre>
 
 
