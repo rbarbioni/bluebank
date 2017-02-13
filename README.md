@@ -103,6 +103,7 @@ curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" "http://bluebank-pus
 - Gradle;
 - NPM;
 - Embeded H2;
+- Jacoco Gradle Coverage Plugin;
 
 ## Screenshots
 
