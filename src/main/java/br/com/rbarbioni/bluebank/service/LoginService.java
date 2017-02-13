@@ -27,11 +27,11 @@ public class LoginService {
         this.authenticationHelper = authenticationHelper;
     }
 
-    public Account login (LoginDto accountLogin) throws JsonProcessingException {
+    public Account login (LoginDto loginDto) throws JsonProcessingException {
 
-        Account account = this.accountService.findUnique(accountLogin.getCpf());
+        Account account = this.accountService.findUnique(loginDto.getCpf(), loginDto.getAgencia(), loginDto.getNumero() );
 
-        if(account == null || !account.getPassword().equals(accountLogin.getPassword())){
+        if(account == null || !account.getPassword().equals(loginDto.getPassword())){
             throw new BlueBankException(HttpStatus.UNAUTHORIZED.value(), "UNAUTHORIZED");
         }
 

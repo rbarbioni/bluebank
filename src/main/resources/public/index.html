@@ -1,29 +1,117 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+
+<html ng-app="blueBank">
+
 <head>
-    <base href="/" />
-    <title>Angular 2 JWT Authentication Example</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- bootstrap css -->
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+    <meta charset="UTF-8">
 
-    <!-- application css -->
-    <link href="app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
 
-    <!-- polyfill(s) for older browsers -->
-    <script src="node_modules/core-js/client/shim.min.js"></script>
 
-    <script src="node_modules/zone.js/dist/zone.js"></script>
-    <script src="node_modules/reflect-metadata/Reflect.js"></script>
-    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-route/angular-route.js"></script>
+    <script src="node_modules/angular-cookies/angular-cookies.js"></script>
+    <script src="node_modules/angular-resource/angular-resource.js"></script>
+    <script src="node_modules/angular-md5/angular-md5.js"></script>
+    <script src="app/scripts/app.js"></script>
 
-    <script src="systemjs.config.js"></script>
-    <script>
-        System.import('app').catch(function (err) { console.error(err); });
-    </script>
+    <script src="app/scripts/controllers/home-controller.js"></script>
+    <script src="app/scripts/controllers/transfer-controller.js"></script>
+    <script src="app/scripts/controllers/extract-controller.js"></script>
+    <script src="app/scripts/controllers/login-controller.js"></script>
+    <script src="app/scripts/controllers/app-controller.js"></script>
+
 </head>
-<body>
-    <app>Loading...</app>
+
+    <body ng-controller="AppController">
+
+    <div class="jumbotron vertical-center" ng-show="account.token == null">
+
+        <div class="container" ng-controller="LoginController">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="login-panel panel panel-default">
+                        <div class="panel-heading" align="center" style="background-color: #ffffff;">
+                            <h3>BlueBank</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form name="FormLoginName" id="idFormLogin" class="form-login" ng-submit="login();">
+
+                                <div class="login-wrap">
+
+                                    <div class="alert alert-danger" ng-if="error === true" ng-cloak>
+                                        <i class="fa fa-times-circle iconError" style=""></i>
+                                        <p ng-repeat="msg in messageResponse">{{msg}}</p>
+                                    </div>
+
+                                    <div class="alert alert-warning" ng-if="warning === true" role="alert" ng-cloak>
+                                        <i class="fa fa-warning iconWarning"></i>
+                                        <p ng-repeat="msg in messageResponse">{{msg}}</p>
+                                    </div>
+
+                                    <label>CPF</label>
+                                    <input id="cpf" type="text" name="cpf" class="form-control" ng-value="account.cpf" ng-model="account.cpf" autofocus required>
+
+                                    <label>Agencia</label>
+                                    <input id="agencia" type="text" name="agencia" class="form-control" ng-value="account.agencia" ng-model="account.agencia" required>
+
+                                    <label>Conta</label>
+                                    <input id="conta" type="text" name="conta" class="form-control" ng-value="account.numero" ng-model="account.numero" required>
+
+                                    <label>Senha</label>
+                                    <input id="password" type="password" class="form-control" ng-model="account.password" name="password" required>
+
+                                    <br>
+
+                                    <button type="submit" class="btn btn-theme btn-block"><i class="fa fa-lock"></i>
+                                        Entrar
+                                    </button>
+
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div ng-show="account.token != null">
+
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">BlueBank</a>
+                </div>
+
+
+                <button class="btn pull-right" type="button" ng-click="logout()">Sair</button>
+
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="/"><i class="fa fa-home" ></i> Home</a></li>
+                    <li><a href="/transfer"><i class="fa fa-exchange"></i> Transferência</a></li>
+                    <li><a href="/extract"><i class="fa fa-list" ></i> Extrato</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="main">
+
+            <div ng-view></div>
+
+        </div>
+
+        <footer class="text-center">
+            <p>BlueBank Application</a></p>
+        </footer>
+
+    </div>
+
 </body>
+
 </html>

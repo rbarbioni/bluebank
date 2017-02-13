@@ -34,16 +34,7 @@ public class AccountService {
 
         Account account = this.accountRepository.findUnique(cpf, agencia, numero);
         if(account == null){
-            throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), String.format("Account inválida [cpf: %s, agencia: %s, numero: %s]", cpf, agencia, numero));
-        }
-        return account;
-    }
-
-    public Account findUnique(String cpf){
-
-        Account account = this.accountRepository.findUnique(cpf);
-        if(account == null){
-            throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), String.format("Account inválida [cpf: %s]", cpf));
+            throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), "Conta inválida");
         }
         return account;
     }
@@ -57,15 +48,21 @@ public class AccountService {
                 accountTransferDto.getSource().getNumero()
                 );
 
-        source = sacar(source, accountTransferDto.getAmount());
-
-        this.save(source);
-
         Account destination = this.findUnique(
                 accountTransferDto.getDestination().getCpf(),
                 accountTransferDto.getDestination().getAgencia(),
                 accountTransferDto.getDestination().getNumero()
         );
+
+        if(source.equals(destination)){
+            throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), "Não é possivel realizar a transferência para a própria conta");
+        }
+
+        source = sacar(source, accountTransferDto.getAmount());
+
+        this.save(source);
+
+
 
         destination = depositar(destination, accountTransferDto.getAmount());
 

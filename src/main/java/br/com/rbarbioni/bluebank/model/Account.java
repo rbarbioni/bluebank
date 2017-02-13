@@ -201,4 +201,20 @@ public class Account implements Serializable, UserDetails, Authentication {
     public String getName() {
         return null;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj == null){
+            return false;
+        }
+
+        if(!(obj instanceof Account)){
+            return false;
+        }
+
+        Account account = (Account) obj;
+
+        return this.cpf.equals(account.getCpf()) && this.agencia.equals(account.getAgencia()) && this.numero.equals(account.getNumero());
+    }
 }
