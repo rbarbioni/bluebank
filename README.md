@@ -88,16 +88,21 @@ curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" "http://bluebank-pus
 
 
 ## Tecnologias
+- Java 8
 - Spring-Boot;
 - Spring-Data-JPA;
 - Spring-Security;
 - Spring-Web;
-- JWT;
+- Spring-Profile;
 - Hibernate;
+- JWT com Token Authorization;
+- API Stateless;
 - AngularJS;
 - Bootstrap;
-- HTML5
-
+- HTML5;
+- Gradle;
+- NPM;
+- Embeded H2;
 
 ## Screenshots
 
