@@ -13,6 +13,7 @@ app.controller('LoginController', function($scope, LoginFactory, md5, $window, $
             $http.defaults.headers.common.Authorization = response.token;
             $window.sessionStorage.setItem('token', response.token);
             $window.sessionStorage.setItem('account', JSON.stringify(response));
+            $scope.account = response;
             $window.location.reload();
         }, function (error) {
             $scope.errorMessage = error.data.message;
