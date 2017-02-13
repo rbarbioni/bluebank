@@ -29,7 +29,6 @@ nbdist/
 /out/
 
 ### Javascript
-/src/main/resources/public/node_modules
 .DS_Store
 # Logs
 logs
