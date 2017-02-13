@@ -1,6 +1,5 @@
 package br.com.rbarbioni.bluebank.controller;
 
-import br.com.rbarbioni.bluebank.exception.BlueBankException;
 import br.com.rbarbioni.bluebank.model.Account;
 import br.com.rbarbioni.bluebank.model.AccountHistory;
 import br.com.rbarbioni.bluebank.model.dto.AccountTransferDto;
@@ -20,7 +19,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -58,7 +56,7 @@ public class AccountControllerTest {
 
     @Test
     public void findAccount () throws JsonProcessingException {
-        given(accountService.findUnique(anyString(), anyString(), anyString())).willThrow(new BlueBankException(HttpStatus.BAD_REQUEST.value(), "Conta Inválida"));
+        given(accountService.findUnique(anyString(), anyString(), anyString())).willReturn(account);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", jwtService.encode(this.account));

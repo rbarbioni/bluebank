@@ -46,8 +46,9 @@ public class AccountHistoryServiceTest {
     @Test
     @Rollback
     public void save () throws JsonProcessingException {
+
         Account account = this.accountService.findUnique(this.accountExist.getCpf(), this.accountExist.getAgencia(), this.accountExist.getNumero());
-        AccountHistory accountHistory = this.accountHistoryService.save(account, Operation.TRANSFERENCIA_SAIDA, BigDecimal.valueOf(200));
+        AccountHistory accountHistory = this.accountHistoryService.save(account, Operation.valueOf("TRANSFERENCIA_SAIDA"), BigDecimal.valueOf(200));
         Assert.assertNotNull(accountHistory);
     }
 

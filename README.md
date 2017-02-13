@@ -1,7 +1,7 @@
 # Blue Bank
 A aplicação pode ser acessada em [BlueBank on Openshift](http://bluebank-pusherad.rhcloud.com)
 
-Projeto desenvolvido 100% utilizando tecnologias Spring com Injeção de dependências Services e compomentes customizados.
+Projeto desenvolvido 100% utilizando tecnologias Spring com Injeção de dependências, JPA, Services e compomentes customizados.
 
 Para controle de transação utilizado Transaction para garantir o I/O nas operações.
 
@@ -88,7 +88,7 @@ curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" "http://bluebank-pus
 
 
 ## Tecnologias
-- Java 8
+- Java 8;
 - Spring-Boot;
 - Spring-Data-JPA;
 - Spring-Security;
@@ -105,6 +105,10 @@ curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" "http://bluebank-pus
 - Embeded H2;
 
 ## Screenshots
+
+Coverage
+
+![Coverage](coverage.png)
 
 Login
 
