@@ -25,6 +25,18 @@ public class LoginDto implements Serializable {
     @NotEmpty
     private String password;
 
+    public LoginDto(){
+        super();
+    }
+
+    public LoginDto(String cpf, String agencia, String numero, String password) {
+        this();
+        this.agencia = agencia;
+        this.numero = numero;
+        this.cpf = cpf;
+        this.password = password;
+    }
+
     public String getCpf() {
         return cpf;
     }

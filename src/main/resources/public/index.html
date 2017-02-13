@@ -8,24 +8,37 @@
 
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+    <link rel="stylesheet" href="node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css" />
 
 
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="node_modules/angular/angular.js"></script>
     <script src="node_modules/angular-route/angular-route.js"></script>
     <script src="node_modules/angular-cookies/angular-cookies.js"></script>
     <script src="node_modules/angular-resource/angular-resource.js"></script>
     <script src="node_modules/angular-md5/angular-md5.js"></script>
+    <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script src="node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
     <script src="app/scripts/app.js"></script>
 
     <script src="app/scripts/controllers/home-controller.js"></script>
     <script src="app/scripts/controllers/transfer-controller.js"></script>
-    <script src="app/scripts/controllers/extract-controller.js"></script>
+    <script src="app/scripts/controllers/statement-controller.js"></script>
     <script src="app/scripts/controllers/login-controller.js"></script>
     <script src="app/scripts/controllers/app-controller.js"></script>
 
 </head>
 
     <body ng-controller="AppController">
+
+    <script>
+
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy'
+        });
+
+    </script>
 
     <div class="jumbotron vertical-center" ng-show="account.token == null">
 

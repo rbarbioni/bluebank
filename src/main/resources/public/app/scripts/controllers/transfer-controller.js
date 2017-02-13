@@ -9,8 +9,7 @@ app.controller('TransferController', function($scope, TransferFactory, $window, 
     $scope.transfer.amount = 0;
     $scope.transfer.source = $scope.account;
 
-    $http.defaults.headers.common.Authorization = $scope.account.token;
-
+    $http.defaults.headers.common.Authorization = $window.sessionStorage.getItem('token');
     $scope.doTransfer = function () {
         TransferFactory.transfer({}, $scope.transfer, function (response) {
             $scope.account = response;
@@ -30,7 +29,7 @@ app.controller('TransferController', function($scope, TransferFactory, $window, 
 app.factory('TransferFactory', function ($resource) {
 
     return $resource(endpoint + '/api/account/transfer', {}, {
-        
+
         transfer:  { method: 'POST' }
     });
 });

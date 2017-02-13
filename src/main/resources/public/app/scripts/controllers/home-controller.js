@@ -6,7 +6,7 @@ app.controller('HomeController', function($scope, $window, AccountFactory, $http
 
 
     $scope.account = JSON.parse($window.sessionStorage.getItem('account'));
-    $http.defaults.headers.common.Authorization = $scope.account.token;
+    $http.defaults.headers.common.Authorization = $window.sessionStorage.getItem('token');
     AccountFactory.find(
         {
             cpf: $scope.account.cpf,

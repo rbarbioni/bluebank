@@ -1,9 +1,10 @@
-
+/*global $ */
 var app = angular.module('blueBank',
     [
         'ngRoute',
         'ngResource',
         'ngCookies',
+        'ui.bootstrap',
         'angular-md5'
     ]);
 
@@ -23,7 +24,7 @@ app.config(function($routeProvider, $locationProvider) {
         })
         
         .when('/extract', {
-            templateUrl : 'app/views/extract.html'
+            templateUrl : 'app/views/statement.html'
         });
 
     $locationProvider.html5Mode({

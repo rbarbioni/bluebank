@@ -3,7 +3,10 @@ package br.com.rbarbioni.bluebank.service;
 import br.com.rbarbioni.bluebank.exception.BlueBankException;
 import br.com.rbarbioni.bluebank.model.Account;
 import br.com.rbarbioni.bluebank.model.dto.AccountTransferDto;
+import br.com.rbarbioni.bluebank.model.enums.Operation;
 import br.com.rbarbioni.bluebank.repository.AccountRepository;
+import br.com.rbarbioni.bluebank.secure.JWTService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,26 +24,35 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
+    private final AccountHistoryService accountHistoryService;
+
+    private final JWTService jwtService;
+
     @Autowired
-    public AccountService(AccountRepository accountRepository) {
+    public AccountService(AccountRepository accountRepository, AccountHistoryService accountHistoryService, JWTService jwtService) {
         this.accountRepository = accountRepository;
+        this.accountHistoryService = accountHistoryService;
+        this.jwtService = jwtService;
     }
 
     public Account save (final Account account){
         return this.accountRepository.save(account);
     }
 
-    public Account findUnique(String cpf, String agencia, String numero){
+    public Account findUnique(String cpf, String agencia, String numero) throws JsonProcessingException {
 
         Account account = this.accountRepository.findUnique(cpf, agencia, numero);
         if(account == null){
             throw new BlueBankException(HttpStatus.BAD_REQUEST.value(), "Conta inválida");
         }
+
+        account.setToken(this.jwtService.encode(account));
+
         return account;
     }
 
     @Transactional
-    public Account transfer(AccountTransferDto accountTransferDto){
+    public Account transfer(AccountTransferDto accountTransferDto) throws JsonProcessingException {
 
         Account source = this.findUnique(
                 accountTransferDto.getSource().getCpf(),
@@ -59,14 +71,14 @@ public class AccountService {
         }
 
         source = sacar(source, accountTransferDto.getAmount());
-
-        this.save(source);
-
-
+        source = this.save(source);
+        this.accountHistoryService.save(source, Operation.TRANSFERENCIA_SAIDA, BigDecimal.valueOf(accountTransferDto.getAmount()));
 
         destination = depositar(destination, accountTransferDto.getAmount());
 
-        this.save(destination);
+        destination = this.save(destination);
+
+        this.accountHistoryService.save(destination, Operation.TRANSFERENCIA_ENTRADA, BigDecimal.valueOf(accountTransferDto.getAmount()));
 
         return source;
     }
@@ -75,7 +87,9 @@ public class AccountService {
     public Account depositar(Account account, Double valor){
 
         account.depositar(BigDecimal.valueOf(valor));
-        return save(account);
+        account = save(account);
+        this.accountHistoryService.save(account, Operation.DEPOSITO, BigDecimal.valueOf(valor));
+        return account;
     }
 
     @Transactional
@@ -87,6 +101,8 @@ public class AccountService {
 
         account.sacar(BigDecimal.valueOf(valor));
 
-        return this.save(account);
+        account = this.save(account);
+        this.accountHistoryService.save(account, Operation.SAQUE, BigDecimal.valueOf(valor));
+        return account;
     }
 }

@@ -15,7 +15,7 @@ public class CpfValidator implements ConstraintValidator<Cpf, String> {
     public boolean isValid(String cpf, final ConstraintValidatorContext context) {
         boolean result;
         if ( cpf == null || "".equals(cpf) ) {
-            result = true;
+            result = false;
         } else {
             result = isCpf(cpf);
         }
@@ -50,19 +50,13 @@ public class CpfValidator implements ConstraintValidator<Cpf, String> {
 
         resto = (d1 % 11);
 
-        if (resto < 2)
-            digito1 = 0;
-        else
-            digito1 = 11 - resto;
+        digito1 = 11 - resto;
 
         d2 += 2 * digito1;
 
         resto = (d2 % 11);
 
-        if (resto < 2)
-            digito2 = 0;
-        else
-            digito2 = 11 - resto;
+        digito2 = 11 - resto;
 
         String nDigVerific = cpf.substring(cpf.length() - 2, cpf.length());
 

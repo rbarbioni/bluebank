@@ -2,7 +2,7 @@
 
 var app = angular.module('blueBank');
 
-app.controller('AppController', function( $scope, $window) {
+app.controller('AppController', function( $scope, $window, $location) {
 
     $scope.account = $window.sessionStorage.getItem('account');
 
@@ -15,6 +15,7 @@ app.controller('AppController', function( $scope, $window) {
 
     $scope.logout = function () {
         $window.sessionStorage.removeItem('account');
+        $location.path('/');
         $window.location.reload();
     }
 
