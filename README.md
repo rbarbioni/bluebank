@@ -28,6 +28,23 @@ cd src/main/resources/public
 sudo npm install
 </pre>
 
+## Sobre o projeto
+
+Foi desenvolvido autenticação, consulta de saldo, transferência e extrato, onde é um resumo de uma tabela de Log que registra as operações contábeis.
+
+Para facilitar, está implementado o sistema de inicialização de tabelas que irá popular com algumas contas para os tests serem realizados, abaixo a tablela.
+
+
+CPF | Agencia | Conta | Senha | Saldo |
+------------ | ------------- | ------------ | ------------ | ------------ |
+31449881114 | 1000 | 10000 | password | 1.000,00 |
+65261248876 | 2000 | 20000 | password | 1.000,00 |
+28865762128 | 3000 | 30000 | password | 1.000,00 |
+93041807084 | 4000 | 40000 | password | 1.000,00 |
+14140472669 | 5000 | 50000 | password | 1.000,00 |
+------------ | ------------- | ------------ | ------------ | ------------ |
+
+
 ## API
 
 POST
@@ -81,21 +98,6 @@ curl -X GET -H "Authorization: TOKEN_QUE_RETORNOU_NO_LOGIN" "http://bluebank-pus
 - Bootstrap;
 - HTML5
 
-## Sobre o projeto
-
-Foi desenvolvido autenticação, consulta de saldo, transferência e extrato, onde é um resumo de uma tabela de Log que registra as operações contábeis.
-
-Para facilitar, está implementado o sistema de inicialização de tabelas que irá popular com algumas contas para os tests serem realizados, abaixo a tablela.
-
-
-CPF | Agencia | Conta | Senha | Saldo |
------------- | ------------- | ------------ | ------------ | ------------ |
-31449881114 | 1000 | 10000 | password | 1.000,00 |
-65261248876 | 2000 | 20000 | password | 1.000,00 |
-28865762128 | 3000 | 30000 | password | 1.000,00 |
-93041807084 | 4000 | 40000 | password | 1.000,00 |
-14140472669 | 5000 | 50000 | password | 1.000,00 |
------------- | ------------- | ------------ | ------------ | ------------ |
 
 ## Screenshots
 
