@@ -87,9 +87,7 @@ public class AccountService {
     public Account depositar(Account account, Double valor){
 
         account.depositar(BigDecimal.valueOf(valor));
-        account = save(account);
-        this.accountHistoryService.save(account, Operation.DEPOSITO, BigDecimal.valueOf(valor));
-        return account;
+        return save(account);
     }
 
     @Transactional
@@ -101,8 +99,6 @@ public class AccountService {
 
         account.sacar(BigDecimal.valueOf(valor));
 
-        account = this.save(account);
-        this.accountHistoryService.save(account, Operation.SAQUE, BigDecimal.valueOf(valor));
-        return account;
+        return this.save(account);
     }
 }

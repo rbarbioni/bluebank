@@ -44,14 +44,8 @@
 
                                 <div class="login-wrap">
 
-                                    <div class="alert alert-danger" ng-if="error === true" ng-cloak>
-                                        <i class="fa fa-times-circle iconError" style=""></i>
-                                        <p ng-repeat="msg in messageResponse">{{msg}}</p>
-                                    </div>
-
-                                    <div class="alert alert-warning" ng-if="warning === true" role="alert" ng-cloak>
-                                        <i class="fa fa-warning iconWarning"></i>
-                                        <p ng-repeat="msg in messageResponse">{{msg}}</p>
+                                    <div class="alert alert-danger" ng-if="errorMessage != null" ng-cloak>
+                                        <p>{{errorMessage}}</p>
                                     </div>
 
                                     <label>CPF</label>
@@ -66,11 +60,11 @@
                                     <label>Senha</label>
                                     <input id="password" type="password" class="form-control" ng-model="account.password" name="password" required>
 
-                                    <br>
-
-                                    <button type="submit" class="btn btn-theme btn-block"><i class="fa fa-lock"></i>
+                                    <label></label>
+                                    <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-lock"></i>
                                         Entrar
                                     </button>
+                                </div>
 
 
                                 </div>

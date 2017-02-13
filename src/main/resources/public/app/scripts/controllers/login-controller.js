@@ -15,7 +15,7 @@ app.controller('LoginController', function($scope, LoginFactory, md5, $window, $
             $window.sessionStorage.setItem('account', JSON.stringify(response));
             $window.location.reload();
         }, function (error) {
-            console.log(error)
+            $scope.errorMessage = error.data.message;
         })
     }
     
